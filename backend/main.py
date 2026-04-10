@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from dotenv import load_dotenv
+load_dotenv()
+
+from fastapi import FastAPI, HTTPException
 from db.database import engine, SessionLocal
 from db.models import Base, Internship
 from scraper.twitter import scrape_twitter
 from llm.filter import score_internship
 from scraper.careers import scrape_careers
 from llm.email_generator import generate_email
-from dotenv import load_dotenv
-load_dotenv()
 
 app = FastAPI()
 
@@ -61,7 +62,7 @@ def get_email(internship_id: int):
     internship = db.query(Internship).filter_by(id=internship_id).first()
 
     if not internship:
-        return {"error": "Not found"}
+        raise HTTPException(status_code=404, detail="Internship not found")
 
     email = generate_email(
         internship.title,

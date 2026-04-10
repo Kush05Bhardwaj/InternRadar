@@ -20,7 +20,7 @@ def scrape_twitter():
                 results.append({
                     "title": "Internship from X",
                     "company": "Unknown",
-                    "link": "https://twitter.com",
+                    "link": f"https://twitter.com/query/status/{hash(text)}",
                     "description": text
                 })
             except:
